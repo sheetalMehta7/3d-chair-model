@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chair Model</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div id="app">
+    <!-- The loading element overlays all else until the model is loaded, at which point we remove this element from the DOM -->
+    <div class="loading" id="js-loader">
+      <div class="loader"></div>
+    </div>
+    <span class="drag-notice" id="js-drag-notice">Drag to rotate 360&#176;</span>
+    <canvas class="webgl"></canvas>
+    <div class="controls">
+      <div class="info">
+        <div class="info__message">
+          <p><strong>&nbsp;Grab&nbsp;</strong> to rotate chair. <strong>&nbsp;Scroll&nbsp;</strong> to zoom.
+            <strong>&nbsp;Drag&nbsp;</strong> swatches to view more.</p>
+        </div>
+      </div>
+      <!-- This tray will be filled with colors via JS, and the ability to slide this panel will be added in with a lightweight slider script (no dependency used for this) -->
+      <div id="js-tray" class="tray">
+        <div id="js-tray-slide" class="tray__slide"></div>
+      </div>
+    </div>
+
+
+
+    <div>
+
+      <!-- These toggle the the different parts of the chair that can be edited, note data-option is the key that links to the name of the part in the 3D file -->
+      <div class="options">
+        <div class="option --is-active" data-option="legs">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1376484/legs.svg" alt="" />
+        </div>
+        <div class="option" data-option="cushions">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1376484/cushions.svg" alt="" />
+        </div>
+        <div class="option" data-option="base">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1376484/base.svg" alt="" />
+        </div>
+        <div class="option" data-option="supports">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1376484/supports.svg" alt="" />
+        </div>
+        <div class="option" data-option="back">
+          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1376484/back.svg" alt="" />
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <script type="module" src="/main.js"></script>
+</body>
+
+</html>
