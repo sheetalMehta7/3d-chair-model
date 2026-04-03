@@ -5,57 +5,100 @@
   <meta charset="UTF-8" />
   <link rel="icon" type="image/svg+xml" href="/vite.svg" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chair Model</title>
+  <title>FORMA — Chair Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-  <div id="app">
-    <!-- The loading element overlays all else until the model is loaded, at which point we remove this element from the DOM -->
-    <div class="loading" id="js-loader">
-      <div class="loader"></div>
+
+  <!-- Loading Screen -->
+  <div class="loading" id="js-loader">
+    <div class="loading__inner">
+      <span class="loading__brand">FORMA</span>
+      <div class="loading__bar"><div class="loading__fill" id="js-load-fill"></div></div>
+      <p class="loading__label" id="js-load-label">Preparing Studio…</p>
     </div>
-    <span class="drag-notice" id="js-drag-notice">Drag to rotate 360&#176;</span>
+  </div>
+
+  <div id="app" class="app--hidden">
+
+    <!-- Header -->
+    <header class="header">
+      <div class="header__brand">
+        <span class="header__logo">FORMA</span>
+        <span class="header__divider">|</span>
+        <span class="header__subtitle">Chair Studio</span>
+      </div>
+      <div class="header__hint" id="js-drag-notice">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5.5" stroke="currentColor" stroke-width="1.2"/><path d="M7 4.5v5M4.5 7h5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+        <span>Drag · Rotate · Scroll to zoom</span>
+      </div>
+    </header>
+
+    <!-- 3D Canvas -->
     <canvas class="webgl"></canvas>
-    <div class="controls">
-      <div class="info">
-        <div class="info__message">
-          <p><strong>&nbsp;Grab&nbsp;</strong> to rotate chair. <strong>&nbsp;Scroll&nbsp;</strong> to zoom.
-            <strong>&nbsp;Drag&nbsp;</strong> swatches to view more.</p>
-        </div>
+
+    <!-- Right Panel — Part Selector -->
+    <aside class="panel panel--parts" id="js-parts-panel">
+      <p class="panel__label">Part</p>
+      <div class="options" id="js-options">
+        <button class="option --is-active" data-option="legs">
+          <div class="option__icon">
+            <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1376484/legs.svg" alt="" />
+          </div>
+          <span class="option__label">Legs</span>
+        </button>
+        <button class="option" data-option="cushions">
+          <div class="option__icon">
+            <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1376484/cushions.svg" alt="" />
+          </div>
+          <span class="option__label">Cushions</span>
+        </button>
+        <button class="option" data-option="base">
+          <div class="option__icon">
+            <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1376484/base.svg" alt="" />
+          </div>
+          <span class="option__label">Base</span>
+        </button>
+        <button class="option" data-option="supports">
+          <div class="option__icon">
+            <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1376484/supports.svg" alt="" />
+          </div>
+          <span class="option__label">Supports</span>
+        </button>
+        <button class="option" data-option="back">
+          <div class="option__icon">
+            <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1376484/back.svg" alt="" />
+          </div>
+          <span class="option__label">Back</span>
+        </button>
       </div>
-      <!-- This tray will be filled with colors via JS, and the ability to slide this panel will be added in with a lightweight slider script (no dependency used for this) -->
-      <div id="js-tray" class="tray">
-        <div id="js-tray-slide" class="tray__slide"></div>
-      </div>
+    </aside>
+
+    <!-- Active material label -->
+    <div class="material-badge" id="js-material-badge">
+      <div class="material-badge__dot" id="js-badge-dot"></div>
+      <span class="material-badge__name" id="js-badge-name">Default</span>
     </div>
 
-
-
-    <div>
-
-      <!-- These toggle the the different parts of the chair that can be edited, note data-option is the key that links to the name of the part in the 3D file -->
-      <div class="options">
-        <div class="option --is-active" data-option="legs">
-          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1376484/legs.svg" alt="" />
-        </div>
-        <div class="option" data-option="cushions">
-          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1376484/cushions.svg" alt="" />
-        </div>
-        <div class="option" data-option="base">
-          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1376484/base.svg" alt="" />
-        </div>
-        <div class="option" data-option="supports">
-          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1376484/supports.svg" alt="" />
-        </div>
-        <div class="option" data-option="back">
-          <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/1376484/back.svg" alt="" />
-        </div>
+    <!-- Bottom Tray -->
+    <div class="tray-wrapper">
+      <button class="tray__arrow tray__arrow--left" id="js-tray-left" aria-label="Scroll left">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M10 12L6 8l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="tray" id="js-tray">
+        <div class="tray__track" id="js-tray-slide"></div>
       </div>
+      <button class="tray__arrow tray__arrow--right" id="js-tray-right" aria-label="Scroll right">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
     </div>
 
   </div>
-  <script type="module" src="/main.js"></script>
-</body>
 
+  <script type="module" src="main.js"></script>
+</body>
 </html>
